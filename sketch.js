@@ -29,40 +29,50 @@ let xAxisTranslate = '';
 function draw() {
   bgColor = getBackgroundColor();
   secondaryBgColor = getSecondaryBackgroundColor(bgColor);
-  //shapeColor = getShapeColor (bgColor, secondaryBgColor);
+  xAxisTranslate = random([0,1]) === 1;
+  shapeColor = getShapeColor(bgColor, secondaryBgColor);
 
   // add main background color
   background(color(bgColor));
-  // add second background
-  xAxisTranslate = random([0,1]) === 1 && false;
+  
+  console.log('bgColor = ' + bgColor);
+  console.log('xAxisTranslate = ' + xAxisTranslate);
   addSecondBackground(secondaryBgColor, xAxisTranslate);
-  addShape();
-
-  ////TODO: figure out how to find length of line and what way I need to travel
-
-
-  // add shape
+  addShape(shapeColor);
+  console.log('rotationDegrees = ' + rotationDegrees)
+  console.log('shapeColor = ' + shapeColor);
 
   // add animation
 }
 
-function addShape() {
-  fill(color('#FFC0CB'))
+function getShapeColor(bgColor, secondaryBgColor) {
+  if (neutralColors.includes(bgColor) && neutralColors.includes(secondaryBgColor)) {
+    return random(brightColors);
+  } else {
+    for (i = 0; i < neutralColors.length; i++) {
+      if (neutralColors[i] !== bgColor && neutralColors[i] !== secondaryBgColor) {
+        return neutralColors[i];
+      }
+    }
+  }
+}
+
+function addShape(shapeColor) {
+  ////TODO: figure out how to find length of line so I know the center point and can set the max offset
+  fill(color(shapeColor))
   if (xAxisTranslate) {
-    rect(-25,50,50,50);
+    rect(-25,400,50,50);
   } else {
     rect(-25,50,50,50);
   }
 }
 
 function addSecondBackground(secondaryBgColor, xAxisTranslate) {
-  // add second background color. 
-  // set the rotation randomly
-  // move off certain
-  y = 0;
+  fill(color(secondaryBgColor));
+    y = 0;
   if (xAxisTranslate) {
     // line starts on x axis
-    startingX = (width/2) + random(-360, 360);
+    startingX = (width/2) + random(-350, 350);
     startingY = 0;
     rotationDegrees = random(-30,30);
     if (rotationDegrees > 0) {
@@ -71,23 +81,15 @@ function addSecondBackground(secondaryBgColor, xAxisTranslate) {
     }
   } else {
     startingX = 0;
-    startingY = (height/2) + random(-360,360);
-    rotationDegrees = random(-145,60);
+    startingY = (height/2) + random(-350,350);
+    rotationDegrees = random(-145,-30);
     if (rotationDegrees < 0) {
       y = -1*height;
     }
   }
-  fill(color(secondaryBgColor));
   translate(startingX, startingY);
-  //// TODO: create left and right bounds for how far off center we can go
-  // rotate(random(0, 180));
-
   rotate(rotationDegrees);
-
-  // rotate(random(-45,45));
   rect(0, y, width*4, height*4);
-
-  ////TODO: add second background to the existing canvas
 }
 
 
@@ -121,11 +123,11 @@ function getSecondaryBackgroundColor(bgColor) {
 
 
 
-//// PHASE 1
+//// PHASE 1 -- COMPLETE --
 //step 1 create two sides with colors appropriately. 
-//step 2: the line can go any angle on canvas but I will need to define outer params so it's not too close to edge
+//step 2: define outer params to prevent intersection from having minimal visibility
 
-//// PHASE 2
+//// PHASE 2 -- IN PROGRESS --
 // step 1: add shape onto the axis at center
 // step 2: offset from center slightly
 
